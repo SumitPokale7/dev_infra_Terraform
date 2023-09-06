@@ -96,29 +96,29 @@ module "bastion" {
   ]
 }
 
-# module "cloudmap" {
-#   source = "../terraform-modules/cloudmap"
-#   tags   = local.tags
-#   vpc_id = module.network.vpc_id
-#   depends_on = [
-#     module.network
-#   ]
-# }
+module "cloudmap" {
+  source = "../terraform-modules/cloudmap"
+  tags   = local.tags
+  vpc_id = module.network.vpc_id
+  depends_on = [
+    module.network
+  ]
+}
 
-# module "secrets-manager" {
+module "secrets-manager" {
 
-#   source   = "lgallard/secrets-manager/aws"
-#   for_each = local.secrets
-#   secrets = {
-#     "${each.key}" = {
-#       description             = each.value.description
-#       recovery_window_in_days = each.value.recovery_window_in_days
-#       secret_string           = each.value.secret_string
-#     }
-#   }
-#   tags = {
-#     Name        = each.key
-#     Environment = terraform.workspace
-#     Terraform   = true
-#   }
-# }
+  source   = "lgallard/secrets-manager/aws"
+  for_each = local.secrets
+  secrets = {
+    "${each.key}" = {
+      description             = each.value.description
+      recovery_window_in_days = each.value.recovery_window_in_days
+      secret_string           = each.value.secret_string
+    }
+  }
+  tags = {
+    Name        = each.key
+    Environment = terraform.workspace
+    Terraform   = true
+  }
+}
