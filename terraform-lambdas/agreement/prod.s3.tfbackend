@@ -1,0 +1,4 @@
+bucket         = "test-terraform-state-prod"
+region         = "eu-north-1"
+profile        = "prod"
+dynamodb_table = "test-terraform-state-prod"
