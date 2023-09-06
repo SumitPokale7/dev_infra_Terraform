@@ -39,26 +39,26 @@ module "database" {
   ]
 }
 
-# module "compute" {
-#   source         = "../terraform-modules/compute"
-#   vpc_id         = module.network.vpc_id
-#   public_subnets = module.network.public_subnets
-#   tags           = local.tags
-#   depends_on = [
-#     module.network
-#   ]
-# }
+module "compute" {
+  source         = "../terraform-modules/compute"
+  vpc_id         = module.network.vpc_id
+  public_subnets = module.network.public_subnets
+  tags           = local.tags
+  depends_on = [
+    module.network
+  ]
+}
 
-# module "container" {
-#   source                  = "../terraform-modules/container"
-#   tags                    = local.tags
-#   vpc_id                  = module.network.vpc_id
-#   test_ecr_repos         = local.test_ecr_repos
-#   aws_iam_policy_settings = local.aws_iam_policy_settings
-#   depends_on = [
-#     module.network
-#   ]
-# }
+module "container" {
+  source                  = "../terraform-modules/container"
+  tags                    = local.tags
+  vpc_id                  = module.network.vpc_id
+  test_ecr_repos         = local.test_ecr_repos
+  aws_iam_policy_settings = local.aws_iam_policy_settings
+  depends_on = [
+    module.network
+  ]
+}
 
 # module "s3" {
 #   source  = "../terraform-modules/s3"
