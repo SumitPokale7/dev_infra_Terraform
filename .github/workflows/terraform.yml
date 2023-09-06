@@ -1,0 +1,82 @@
+name: Dev Infra
+
+on:
+  push:
+    branches:
+      - development
+      - main
+
+jobs:
+  Build_Stage:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    outputs:
+      short-sha: ${{ steps.short-sha.outputs.sha }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - uses: benjlevesque/short-sha@v2.1
+        id: short-sha
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_STAGE }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGE }}
+          aws-region: eu-north-1
+
+  Deploy_Stage:
+    needs: Build_Stage
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          repository: SumitPokale7/dev-infra_Terraform
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: "Terraform Init"
+        uses: hashicorp/terraform-github-actions@v0.8.0
+        with:
+          tf_actions_version: 1.3.1
+          tf_actions_subcommand: "init"
+          tf_actions_working_dir: "terraform-infrastructure"
+          tf_actions_comment: true
+          args: '-backend-config="stage.s3.tfbackend"'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_STAGE }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGE }}
+
+      - name: Terraform Validate
+        uses: hashicorp/terraform-github-actions/validate@v0.3.7
+
+      - name: "Terraform Plan"
+        uses: hashicorp/terraform-github-actions@v0.8.0
+        with:
+          tf_actions_version: 1.3.1
+          tf_actions_subcommand: "plan"
+          tf_actions_working_dir: "terraform-infrastructure"
+          tf_actions_comment: true
+          args: '-var-file="stage.tfvars"'
+        env:
+          TF_WORKSPACE: stage
+          TF_VAR_app_version: ${{ needs.Build_Stage.outputs.short-sha }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_STAGE }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGE }}
+
+      - name: "Terraform Apply"
+        uses: hashicorp/terraform-github-actions@v0.8.0
+        with:
+          tf_actions_version: 1.3.1
+          tf_actions_subcommand: "apply"
+          tf_actions_working_dir: "terraform-infrastructure"
+          tf_actions_comment: true
+          args: '-var-file="stage.tfvars"'
+        env:
+          TF_WORKSPACE: stage
+          TF_VAR_app_version: ${{ needs.Build_Stage.outputs.short-sha }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_STAGE }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGE }}
+
