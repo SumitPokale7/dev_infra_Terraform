@@ -84,17 +84,17 @@ module "redis" {
   ]
 }
 
-# module "bastion" {
-#   source              = "../terraform-modules/bastion"
-#   public_subnets      = module.network.public_subnets[0]
-#   vpc_id              = module.network.vpc_id
-#   https_listener_arns = module.compute.https_listener_arns
-#   tags                = local.tags
-#   depends_on = [
-#     module.network,
-#     module.compute
-#   ]
-# }
+module "bastion" {
+  source              = "../terraform-modules/bastion"
+  public_subnets      = module.network.public_subnets[0]
+  vpc_id              = module.network.vpc_id
+  https_listener_arns = module.compute.https_listener_arns
+  tags                = local.tags
+  depends_on = [
+    module.network,
+    module.compute
+  ]
+}
 
 # module "cloudmap" {
 #   source = "../terraform-modules/cloudmap"
