@@ -60,29 +60,29 @@ module "container" {
   ]
 }
 
-# module "s3" {
-#   source  = "../terraform-modules/s3"
-#   tags    = local.tags
-#   buckets = local.buckets
-#   depends_on = [
-#     module.network
-#   ]
-# }
+module "s3" {
+  source  = "../terraform-modules/s3"
+  tags    = local.tags
+  buckets = local.buckets
+  depends_on = [
+    module.network
+  ]
+}
 
-# module "redis" {
-#   source               = "../terraform-modules/elasticache"
-#   tags                 = local.tags
-#   private_subnets      = module.network.private_subnets
-#   vpc_cidr             = var.vpc_cidr
-#   vpc_id               = module.network.vpc_id
-#   parameter_group_name = var.elasticache_parameter_group_name
-#   engine               = var.elasticache_engine
-#   engine_version       = var.elasticache_engine_version
-#   node_type            = var.elasticache_node_type
-#   depends_on = [
-#     module.network
-#   ]
-# }
+module "redis" {
+  source               = "../terraform-modules/elasticache"
+  tags                 = local.tags
+  private_subnets      = module.network.private_subnets
+  vpc_cidr             = var.vpc_cidr
+  vpc_id               = module.network.vpc_id
+  parameter_group_name = var.elasticache_parameter_group_name
+  engine               = var.elasticache_engine
+  engine_version       = var.elasticache_engine_version
+  node_type            = var.elasticache_node_type
+  depends_on = [
+    module.network
+  ]
+}
 
 # module "bastion" {
 #   source              = "../terraform-modules/bastion"
