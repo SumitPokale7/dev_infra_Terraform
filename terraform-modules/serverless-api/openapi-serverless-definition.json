@@ -1,0 +1,70 @@
+{
+
+    "openapi" : "3.0.1",
+    "info" : {
+      "title"   : "test-sls-api-test",
+      "version" : "1.0"
+    },
+    "schemes" : [
+      "https"
+    ],
+    "x-amazon-apigateway-api-key-source" : "AUTHORIZER",
+    "paths" : {
+      "/organizations/{organization_id}" : {
+        "get" : {
+          "x-amazon-apigateway-integration" : {
+            "httpMethod"           : "post",
+            "payloadFormatVersion" : "1.0",
+            "type"                 : "aws_proxy",
+            "passthroughBehavior" : "when_no_match",
+            "uri"                  : "arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambda_organisation_api_arn}/invocations"
+          },
+          "responses" : {},
+          "security" : [
+            {
+              "MyLambdaTokenAuthorizer" : [],
+              "api_key" : []
+            }
+          ]
+        }
+      },
+      "/organizations/{organization_id}/{proxy+}" : {
+        "x-amazon-apigateway-any-method" : {
+          "x-amazon-apigateway-integration" : {
+            "httpMethod"           : "post",
+            "payloadFormatVersion" : "1.0",
+            "type"                 : "aws_proxy",
+            "passthroughBehavior" : "when_no_match",
+            "uri"                  : "arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambda_organisation_api_arn}/invocations"
+          },
+          "responses" : {},
+          "security" : [
+            {
+              "MyLambdaTokenAuthorizer" : [],
+              "api_key" : []
+            }
+          ]
+        }
+      }
+    },
+    "components" : {
+      "securitySchemes" : {
+        "api_key" : {
+          "type" : "apiKey",
+          "name" :  "x-api-key",
+          "in"   : "header"
+        },
+        "MyLambdaTokenAuthorizer" : {
+          "type": "apiKey",
+          "name": "Authorization",
+          "in": "header",
+          "x-amazon-apigateway-authtype": "custom",
+          "x-amazon-apigateway-authorizer": {
+            "authorizerUri" : "arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${lambda_authorizer_arn}/invocations",
+            "authorizerResultTtlInSeconds" : 300,
+            "type" : "token"
+          }
+        }
+      }
+    }
+  }

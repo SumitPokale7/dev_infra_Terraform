@@ -4,7 +4,6 @@
 
 # Local Terraform directories
 **/terraform-applications
-**/terraform-serverless-api
 **/terraform-modules
 
 

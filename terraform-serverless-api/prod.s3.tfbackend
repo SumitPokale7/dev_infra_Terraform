@@ -1,0 +1,6 @@
+# backend.hcl
+encrypt        = true
+region         = "eu-north-1"
+bucket         = "test-terraform-state-prod"
+dynamodb_table = "test-terraform-state-prod"
+key            = "env/prod/test-serverless-api.tfstate"
