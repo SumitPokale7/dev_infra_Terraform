@@ -11,33 +11,33 @@ module "network" {
   tags                  = local.tags
 }
 
-# module "database" {
-#   source                = "../terraform-modules/database"
-#   private_subnets       = module.network.private_subnets
-#   public_subnets        = module.network.public_subnets
-#   max_allocated_storage = var.max_allocated_storage
-#   major_engine_version  = var.major_engine_version
-#   deletion_protection   = var.deletion_protection
-#   skip_final_snapshot   = var.skip_final_snapshot
-#   maintenance_window    = var.maintenance_window
-#   vpc_id                = module.network.vpc_id
-#   allocated_storage     = var.allocated_storage
-#   identifier_name       = var.identifier_name
-#   engine_version        = var.engine_version
-#   db_backup_name        = var.db_backup_name
-#   instance_class        = var.instance_class
-#   rotation_days         = var.rotation_days
-#   engine_name           = var.engine_name
-#   username             = var.username
-#   vpc_cidr              = var.vpc_cidr
-#   db_name               = var.db_name
-#   multi_az              = var.multi_az
-#   family                = var.family
-#   tags                  = local.tags
-#   depends_on = [
-#     module.network
-#   ]
-# }
+module "database" {
+  source                = "../terraform-modules/database"
+  private_subnets       = module.network.private_subnets
+  public_subnets        = module.network.public_subnets
+  max_allocated_storage = var.max_allocated_storage
+  major_engine_version  = var.major_engine_version
+  deletion_protection   = var.deletion_protection
+  skip_final_snapshot   = var.skip_final_snapshot
+  maintenance_window    = var.maintenance_window
+  vpc_id                = module.network.vpc_id
+  allocated_storage     = var.allocated_storage
+  identifier_name       = var.identifier_name
+  engine_version        = var.engine_version
+  db_backup_name        = var.db_backup_name
+  instance_class        = var.instance_class
+  rotation_days         = var.rotation_days
+  engine_name           = var.engine_name
+  username             = var.username
+  vpc_cidr              = var.vpc_cidr
+  db_name               = var.db_name
+  multi_az              = var.multi_az
+  family                = var.family
+  tags                  = local.tags
+  depends_on = [
+    module.network
+  ]
+}
 
 # module "compute" {
 #   source         = "../terraform-modules/compute"
