@@ -1,0 +1,4 @@
+bucket         = "lawly-terraform-state-prod"
+region         = "eu-north-1"
+profile        = "prod"
+dynamodb_table = "lawly-terraform-state-prod"

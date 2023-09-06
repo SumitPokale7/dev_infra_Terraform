@@ -1,0 +1,25 @@
+module "services" {
+  source                      = "../../terraform-modules/app-services"
+  fargate_cpu                 = var.fargate_cpu
+  fargate_memory              = var.fargate_memory
+  desired_count               = var.desired_count
+  launch_type                 = var.launch_type
+  assign_public_ip            = var.assign_public_ip
+  network_mode                = var.network_mode
+  service_name                = var.service_name
+  application_container_port  = var.application_container_port
+  container_definitions       = local.container_definitions
+  vpc_id                      = data.terraform_remote_state.infrastructure.outputs.vpc_id
+  private_subnets             = data.terraform_remote_state.infrastructure.outputs.private_subnets
+  ecs_cluster_id              = data.terraform_remote_state.infrastructure.outputs.ecs_cluster_id
+  ecs_sg_id                   = data.terraform_remote_state.infrastructure.outputs.ecs_sg_id
+  ecs_task_execution_role_arn = data.terraform_remote_state.infrastructure.outputs.ecs_task_execution_role_arn
+  ecs_task_role_arn           = data.terraform_remote_state.infrastructure.outputs.ecs_task_role_arn
+  https_listener_arns         = data.terraform_remote_state.infrastructure.outputs.https_listener_arns
+  domain                      = var.domain
+  additional_domains          = var.additional_domains
+  create_additional_domains   = false
+  create_target_group         = false
+  tags                        = local.tags
+  create_service_discovery    = true
+}
