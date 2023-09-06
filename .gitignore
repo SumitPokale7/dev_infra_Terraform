@@ -3,7 +3,6 @@
 **/.terraform.lock.hcl
 
 # Local Terraform directories
-**/terraform-api-gateways
 **/terraform-applications
 **/terraform-cloudfront
 **/terraform-lambdas
