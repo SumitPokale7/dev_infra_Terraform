@@ -4,7 +4,6 @@
 
 # Local Terraform directories
 **/terraform-applications
-**/terraform-cloudfront
 **/terraform-lambdas
 **/terraform-serverless-api
 **/terraform-ses
